@@ -26,15 +26,5 @@ $ npm run prisma:mongo:dbpush
 $ npm run generate:db_clients
 ```
 
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
+## Source Learn
+- [How to connect Multiple Database using Prisma](https://dulanwirajith.medium.com/how-to-connect-multiple-databases-using-prisma-in-nest-js-e8908529ba38)

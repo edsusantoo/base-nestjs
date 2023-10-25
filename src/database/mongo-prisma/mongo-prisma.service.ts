@@ -20,7 +20,7 @@ export class MongoPrismaService
       try {
         await this.$connect();
 
-        this.logger.log('Successfully connected to bosnet database');
+        this.logger.log('Successfully connected to mongo database');
 
         break;
       } catch (err) {

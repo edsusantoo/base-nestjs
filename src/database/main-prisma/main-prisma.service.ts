@@ -18,7 +18,7 @@ export class MainPrismaService
       try {
         await this.$connect();
 
-        this.logger.log('Successfully connected to bosnet database');
+        this.logger.log('Successfully connected to main database');
 
         break;
       } catch (err) {

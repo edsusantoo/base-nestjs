@@ -2,13 +2,12 @@ import {
   Injectable,
   NotAcceptableException,
   NotFoundException,
-  BadRequestException,
   ConflictException,
 } from '@nestjs/common';
 
 import { MainPrismaService } from 'src/database/main-prisma/main-prisma.service';
 import { MongoPrismaService } from 'src/database/mongo-prisma/mongo-prisma.service';
-import { UserDto } from '../dto/user.dto';
+import { ResponseUserMainDto, ResponseUserMongoDto } from '../dto/user.dto';
 
 interface UserRequestInterface {
   id?: number;
@@ -16,6 +15,12 @@ interface UserRequestInterface {
   username?: string;
   email?: string;
   telp?: string;
+}
+
+interface UserMongoRequestInterface {
+  id?: string;
+  name?: string;
+  email?: string;
 }
 
 @Injectable()
@@ -28,14 +33,15 @@ export class UserService {
   async createUserMain({
     username,
     email,
-  }: UserRequestInterface): Promise<UserDto> {
+    telp,
+  }: UserRequestInterface): Promise<ResponseUserMainDto> {
     const user = await this.mainService.user.findFirst({
       where: {
         username,
       },
     });
 
-    if (!user) {
+    if (user) {
       throw new ConflictException();
     }
 
@@ -43,6 +49,7 @@ export class UserService {
       data: {
         username,
         email,
+        telp,
       },
     });
 
@@ -50,14 +57,15 @@ export class UserService {
       throw new NotAcceptableException();
     }
 
-    return new UserDto({ ...insert, id: insert.id.toString() });
+    return new ResponseUserMainDto({ ...insert, id: insert.id.toString() });
   }
 
   async updateUserMain({
     id,
     username,
     email,
-  }: UserRequestInterface): Promise<UserDto> {
+    telp,
+  }: UserRequestInterface): Promise<ResponseUserMainDto> {
     const user = await this.mainService.user.findUnique({
       where: {
         id,
@@ -75,10 +83,11 @@ export class UserService {
       data: {
         username,
         email,
+        telp,
       },
     });
 
-    return new UserDto({ ...update, id: update.id.toString() });
+    return new ResponseUserMainDto({ ...update, id: update.id.toString() });
   }
 
   async deleteUserMain(id: number) {
@@ -99,11 +108,11 @@ export class UserService {
     });
   }
 
-  async getUsersMain(): Promise<UserDto[]> {
+  async getUsersMain(): Promise<ResponseUserMainDto[]> {
     const users = await this.mainService.user.findMany();
 
     return users.map((user) => {
-      return new UserDto({ ...user, id: user.id.toString() });
+      return new ResponseUserMainDto({ ...user, id: user.id.toString() });
     });
   }
 
@@ -111,23 +120,29 @@ export class UserService {
     id,
     username,
     email,
-  }: UserRequestInterface): Promise<UserDto[]> {
+    telp,
+  }: UserRequestInterface): Promise<ResponseUserMainDto[]> {
     const users = await this.mainService.user.findMany({
       where: {
         OR: [
           {
             id: {
-              equals: id,
+              equals: id ? id : 0,
             },
           },
           {
             username: {
-              equals: username,
+              equals: username ? username : '',
             },
           },
           {
             email: {
-              equals: email,
+              equals: email ? email : '',
+            },
+          },
+          {
+            telp: {
+              equals: telp ? telp : '',
             },
           },
         ],
@@ -135,21 +150,21 @@ export class UserService {
     });
 
     return users.map((user) => {
-      return new UserDto({ ...user, id: user.id.toString() });
+      return new ResponseUserMainDto({ ...user, id: user.id.toString() });
     });
   }
 
   async createUserMongo({
     name,
     email,
-  }: UserRequestInterface): Promise<UserDto> {
+  }: UserRequestInterface): Promise<ResponseUserMongoDto> {
     const user = await this.mongoService.user.findFirst({
       where: {
         email,
       },
     });
 
-    if (!user) {
+    if (user) {
       throw new ConflictException();
     }
 
@@ -164,14 +179,14 @@ export class UserService {
       throw new NotAcceptableException();
     }
 
-    return new UserDto({ ...insert, id: insert.id });
+    return new ResponseUserMongoDto({ ...insert, id: insert.id });
   }
 
   async updateUserMongo({
     id,
     name,
     email,
-  }: UserRequestInterface): Promise<UserDto> {
+  }: UserMongoRequestInterface): Promise<ResponseUserMongoDto> {
     const user = await this.mongoService.user.findFirst({
       where: {
         id: id.toString(),
@@ -196,7 +211,7 @@ export class UserService {
       throw new NotAcceptableException();
     }
 
-    return new UserDto({ ...update, id: update.id.toString() });
+    return new ResponseUserMongoDto({ ...update, id: update.id.toString() });
   }
 
   async deleteUserMongo(id: string) {
@@ -217,11 +232,11 @@ export class UserService {
     });
   }
 
-  async getUsersMongo(): Promise<UserDto[]> {
+  async getUsersMongo(): Promise<ResponseUserMongoDto[]> {
     const users = await this.mongoService.user.findMany();
 
     return users.map((user) => {
-      return new UserDto({ ...user, id: user.id.toString() });
+      return new ResponseUserMongoDto({ ...user, id: user.id.toString() });
     });
   }
 
@@ -229,13 +244,13 @@ export class UserService {
     id,
     name,
     email,
-  }: UserRequestInterface): Promise<UserDto[]> {
+  }: UserMongoRequestInterface): Promise<ResponseUserMongoDto[]> {
     const users = await this.mongoService.user.findMany({
       where: {
         OR: [
           {
             id: {
-              equals: id.toString(),
+              equals: id,
             },
           },
           {
@@ -253,7 +268,7 @@ export class UserService {
     });
 
     return users.map((user) => {
-      return new UserDto({ ...user, id: user.id.toString() });
+      return new ResponseUserMongoDto({ ...user, id: user.id.toString() });
     });
   }
 }

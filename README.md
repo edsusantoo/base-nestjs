@@ -9,7 +9,7 @@
 - [x] Create Validation Request
 - [x] Create Base Response
 - [x] Create Auth Service
-- [ ] Implentation Passport JWT
+- [x] Implentation Passport JWT
 - [ ] Create Swagger
 
 ## Tech Stack

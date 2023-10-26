@@ -8,7 +8,9 @@
 - [x] Create Sample Request
 - [x] Create Validation Request
 - [x] Create Base Response
-- [ ] Create Auth Service
+- [x] Create Auth Service
+- [ ] Implentation Passport JWT
+- [ ] Create Swagger
 
 ## Tech Stack
 - NestJS 10

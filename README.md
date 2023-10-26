@@ -10,6 +10,12 @@
 - [x] Create Base Response
 - [ ] Create Auth Service
 
+## Tech Stack
+- NestJS 10
+- Prisma 5
+- Postgress (Main Database)
+- MongoDB
+
 ## Installation
 
 ```bash

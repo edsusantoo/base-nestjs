@@ -1,7 +1,5 @@
 import {
   Controller,
-  UseInterceptors,
-  ClassSerializerInterceptor,
   Post,
   Get,
   Delete,

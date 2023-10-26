@@ -2,6 +2,14 @@
 
 [Nest](https://github.com/nestjs/nest) baseframework TypeScript starter repository and base project.
 
+## Task List
+
+- [x] Create 2 Connection
+- [x] Create Sample Request
+- [x] Create Validation Request
+- [x] Create Base Response
+- [ ] Create Auth Service
+
 ## Installation
 
 ```bash

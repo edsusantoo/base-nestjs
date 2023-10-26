@@ -9,6 +9,7 @@ import { MainPrismaService } from 'src/database/main-prisma/main-prisma.service'
 
 import * as bcrypt from 'bcrypt';
 import { ResponseAuthDto } from '../dto/auth.dto';
+import { JwtService } from '@nestjs/jwt';
 
 interface RegisterRequestInterface {
   username: string;
@@ -23,7 +24,10 @@ interface LoginRequestInterface {
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly mainService: MainPrismaService) {}
+  constructor(
+    private readonly mainService: MainPrismaService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async register({
     username,
@@ -75,6 +79,17 @@ export class AuthService {
       throw new BadRequestException('Password not match');
     }
 
-    return new ResponseAuthDto({ ...user, id: Number(user.id) });
+    const payload = {
+      id: Number(user.id),
+      username: user.username,
+      email: user.email,
+    };
+    const accessToken = this.jwtService.sign(payload);
+
+    return new ResponseAuthDto({
+      ...user,
+      id: Number(user.id),
+      auth: { type: 'Bearer', token: accessToken, expiredAt: '360' },
+    });
   }
 }

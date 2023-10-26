@@ -4,11 +4,22 @@ import { AuthController } from './controller/auth.controller';
 import { DatabaseModule } from 'src/database/database.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ResponseInterceptor } from 'src/common/interceptor/response.interceptor';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtStrategy } from './strategy/jwt.strategy';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [
+    DatabaseModule,
+    PassportModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '360s' },
+    }),
+  ],
   providers: [
     AuthService,
+    JwtStrategy,
     {
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor,

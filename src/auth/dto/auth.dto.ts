@@ -33,11 +33,11 @@ export class ResponseAuthDto {
 
   @Exclude()
   password: string;
-  //   auth: {
-  //     type: string;
-  //     token: string;
-  //     expiredAt: string;
-  //   };
+  auth?: {
+    type: string;
+    token: string;
+    expiredAt: string;
+  };
 
   constructor(partial: Partial<ResponseAuthDto>) {
     Object.assign(this, partial);

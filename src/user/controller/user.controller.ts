@@ -8,6 +8,7 @@ import {
   Param,
   ParseIntPipe,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from '../service/user.service';
 import {
@@ -17,8 +18,10 @@ import {
   RequestUpdateUserMongoDto,
 } from '../dto/user.dto';
 import { ResponseMessage } from 'src/common/decorator/response.decorator';
+import { JwtAuthGuard } from 'src/auth/guard/jwt.guard';
 
 @Controller('user')
+@UseGuards(JwtAuthGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

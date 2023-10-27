@@ -1,0 +1,453 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Base NestJS",
+    "description": "API Spec For Base NestJS",
+    "version": "1.0"
+  },
+  "servers": [{ "url": "http://localhost:3000/api" }],
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "username": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "telp": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      },
+      "ErrorException": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "number"
+          }
+        }
+      },
+      "ErrorExceptionExample": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "array",
+            "example": ["email must be an email"]
+          },
+          "error": {
+            "type": "string",
+            "example": "Bad Request"
+          },
+          "statusCode": {
+            "type": "number",
+            "example": 400
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "tags": ["Auth"],
+        "description": "Register new User",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "example": "edi.susanto"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "edi.susanto@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "B1ntaro10@asdfasdf"
+                  },
+                  "telp": {
+                    "type": "string",
+                    "example": "08989898989"
+                  }
+                },
+                "required": ["username", "email", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "statusCode": {
+                      "type": "number",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Register Successfully"
+                    },
+                    "result": {
+                      "type": "object",
+                      "items": {
+                        "$ref": "#/components/schemas/User"
+                      },
+                      "example": {
+                        "id": 4,
+                        "username": "edi.susanto",
+                        "email": "edi.susanto@gmail.com",
+                        "telp": null,
+                        "createdAt": "2023-10-27T03:27:10.088Z",
+                        "udpatedAt": "2023-10-27T03:27:10.088Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorExceptionExample"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "If already register user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorException"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": ["Auth"],
+        "description": "For Login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "example": "edi.susanto"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "Bismillah"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully Login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "statusCode": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Login Successfully"
+                    },
+                    "result": {
+                      "type": "object",
+                      "example": {
+                        "id": 1,
+                        "username": "edi.susanto",
+                        "email": "edi.susanto@gmail.com",
+                        "telp": null,
+                        "createdAt": "2023-10-26T02:57:58.020Z",
+                        "udpatedAt": "2023-10-26T02:57:58.020Z",
+                        "auth": {
+                          "type": "Bearer",
+                          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJlZGkuc3VzYW50byIsImVtYWlsIjoiZWRpLnN1c2FudG9AZ21haWwuY29tIiwiaWF0IjoxNjk4Mzc5NTYxLCJleHAiOjE2OTgzNzk5MjF9.EmyZpKgRMh-Qald8WQAnbC6RsegkR6r8NmnOiG4LnHA",
+                          "expiredAt": "360"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Password not match",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorException"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorException"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user": {
+      "post": {
+        "tags": ["User"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "example": "edi.susanto"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "edi.susanto@gmail.com"
+                  },
+                  "telp": {
+                    "type": "string",
+                    "example": "089899898"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Created User",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "statusCode": {
+                      "type": "number",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Created Successfully"
+                    },
+                    "result": {
+                      "type": "object",
+                      "example": {
+                        "id": "5",
+                        "username": "testing.5",
+                        "email": "testing.5@gmail.com",
+                        "telp": "0898989898",
+                        "password": null,
+                        "createdAt": "2023-10-27T06:33:42.215Z",
+                        "udpatedAt": "2023-10-27T06:33:42.215Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "array",
+                      "example": [
+                        "email must be an email",
+                        "email should not be empty"
+                      ]
+                    },
+                    "error": {
+                      "type": "string",
+                      "example": "Bad Request"
+                    },
+                    "statusCode": {
+                      "type": "number",
+                      "example": 400
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "If already register user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorException"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["User"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "username": {
+                    "type": "string",
+                    "example": "edi.susanto"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "edi.susanto@gmail.com"
+                  },
+                  "telp": {
+                    "type": "string",
+                    "example": "089899898"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update User",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "statusCode": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Updated Successfully"
+                    },
+                    "result": {
+                      "type": "object",
+                      "example": {
+                        "id": "5",
+                        "username": "edi.susanto.update.1",
+                        "email": "edi.susanto.update.1@gmail.com",
+                        "telp": "0898989898",
+                        "password": null,
+                        "createdAt": "2023-10-27T06:33:42.215Z",
+                        "udpatedAt": "2023-10-27T06:48:03.288Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorExceptionExample"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Get All Data User",
+        "tags": ["User"],
+        "responses": {
+          "200": {
+            "description": "Show Data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "statusCode": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Show datas"
+                    },
+                    "result": {
+                      "type": "object",
+                      "example": [
+                        {
+                          "id": "1",
+                          "username": "edi.susanto",
+                          "email": "edi.susanto@gmail.com",
+                          "telp": null,
+                          "createdAt": "2023-10-26T02:57:58.020Z",
+                          "udpatedAt": "2023-10-26T02:57:58.020Z"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

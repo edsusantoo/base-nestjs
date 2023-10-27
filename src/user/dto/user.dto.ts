@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { IsNotEmpty, MinLength, IsEmail } from 'class-validator';
 
 export class RequestCreateUserMainDto {
@@ -40,6 +41,9 @@ export class ResponseUserMainDto {
   telp: string;
   createdAt: Date;
   updatedAt: Date;
+
+  @Exclude()
+  password: string;
 
   constructor(partial: Partial<ResponseUserMainDto>) {
     Object.assign(this, partial);

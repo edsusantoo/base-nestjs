@@ -10,7 +10,7 @@
 - [x] Create Base Response
 - [x] Create Auth Service
 - [x] Implentation Passport JWT
-- [ ] Create Swagger
+- [x] Create Swagger
 
 ## Tech Stack
 - NestJS 10

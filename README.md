@@ -12,6 +12,7 @@
 - [x] Implentation Passport JWT
 - [x] Create Swagger
 - [ ] Role Base Access Control
+- [ ] Permission Control
 
 ## Tech Stack
 - NestJS 10

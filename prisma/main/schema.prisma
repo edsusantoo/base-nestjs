@@ -11,14 +11,38 @@ datasource db {
   url      = env("DATABASE_POSTGRESS_URL")
 }
 
-model User{
-  id  BigInt @id @default(autoincrement())
-  username  String @unique  @db.VarChar(100)
-  email String @unique @db.VarChar(200)
-  telp String? @db.VarChar(16)
-  password String? @db.Text
-  createdAt DateTime @default(now())
-  udpatedAt DateTime @updatedAt
+model User {
+  id        BigInt     @id @default(autoincrement())
+  username  String     @unique @db.VarChar(100)
+  email     String     @unique @db.VarChar(200)
+  telp      String?    @db.VarChar(16)
+  password  String?    @db.Text
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  userRole  UserRole[]
 
   @@map("users")
+}
+
+model Role {
+  id        BigInt     @id @default(autoincrement())
+  name      String     @unique @db.VarChar(100)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  userRole  UserRole[]
+
+  @@map("roles")
+}
+
+model UserRole {
+  id        BigInt   @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    BigInt
+  role      Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  roleId    BigInt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([userId, roleId])
+  @@map("user_roles")
 }

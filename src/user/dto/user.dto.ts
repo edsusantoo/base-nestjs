@@ -2,8 +2,6 @@ import { Exclude } from 'class-transformer';
 import { IsNotEmpty, MinLength, IsEmail } from 'class-validator';
 
 export class RequestCreateUserMainDto {
-  id: number;
-
   @IsNotEmpty()
   @MinLength(3, {
     message: 'Username min 3 character',

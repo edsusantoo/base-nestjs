@@ -1,5 +1,6 @@
 import { Exclude } from 'class-transformer';
 import { IsNotEmpty, MinLength, IsEmail } from 'class-validator';
+import { ResponseRoleDto } from 'src/role/dto/role.dto';
 
 export class RequestRegisterDto {
   @IsNotEmpty()
@@ -24,12 +25,20 @@ export class RequestLoginDto {
   password: string;
 }
 
-export class ResponseAuthDto {
+export class ResponseLoginDto {
   id: number;
   username: string;
   email: string;
+
+  @Exclude()
   createdAt: Date;
+  @Exclude()
   updatedAt: Date;
+
+  @Exclude()
+  userRole: any[];
+
+  roles: ResponseRoleDto[];
 
   @Exclude()
   password: string;
@@ -39,7 +48,22 @@ export class ResponseAuthDto {
     expiredAt: string;
   };
 
-  constructor(partial: Partial<ResponseAuthDto>) {
+  constructor(partial: Partial<ResponseLoginDto>) {
+    Object.assign(this, partial);
+  }
+}
+
+export class ResponseRegisterDto {
+  id: number;
+  username: string;
+  email: string;
+  createdAt: Date;
+  updatedAt: Date;
+
+  @Exclude()
+  password: string;
+
+  constructor(partial: Partial<ResponseRegisterDto>) {
     Object.assign(this, partial);
   }
 }

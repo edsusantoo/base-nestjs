@@ -106,6 +106,8 @@ export class UserService {
         id,
       },
     });
+
+    return {};
   }
 
   async getUsersMain(): Promise<ResponseUserMainDto[]> {
@@ -230,6 +232,8 @@ export class UserService {
         id,
       },
     });
+
+    return {};
   }
 
   async getUsersMongo(): Promise<ResponseUserMongoDto[]> {

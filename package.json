@@ -21,6 +21,7 @@
     "prisma": "prisma",
     "prisma:main:studio": "npx prisma studio --schema prisma/main/schema.prisma",
     "prisma:main:dbpush": "npx prisma db push --schema prisma/main/schema.prisma",
+    "prisma:main:dbpush:reset": "npx prisma db push --force-reset --schema prisma/main/schema.prisma",
     "prisma:mongo:studio": "npx prisma studio --schema prisma/mongo/schema.prisma",
     "prisma:mongo:dbpush": "npx prisma db push  --schema prisma/mongo/schema.prisma",
     "prisma:generate:db_clients": "prisma generate --schema prisma/main/schema.prisma && prisma generate --schema prisma/mongo/schema.prisma"

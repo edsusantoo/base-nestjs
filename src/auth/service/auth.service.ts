@@ -8,8 +8,9 @@ import {
 import { MainPrismaService } from 'src/database/main-prisma/main-prisma.service';
 
 import * as bcrypt from 'bcrypt';
-import { ResponseAuthDto } from '../dto/auth.dto';
+import { ResponseLoginDto, ResponseRegisterDto } from '../dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
+import { ResponseRoleDto } from 'src/role/dto/role.dto';
 
 interface RegisterRequestInterface {
   username: string;
@@ -33,7 +34,7 @@ export class AuthService {
     username,
     email,
     password,
-  }: RegisterRequestInterface): Promise<ResponseAuthDto> {
+  }: RegisterRequestInterface): Promise<ResponseRegisterDto> {
     const user = await this.mainService.user.findFirst({
       where: {
         username,
@@ -41,7 +42,7 @@ export class AuthService {
     });
 
     if (user) {
-      throw new ConflictException();
+      throw new ConflictException('User is already register');
     }
 
     const saltOrRounds = 15;
@@ -59,13 +60,19 @@ export class AuthService {
       throw new NotAcceptableException();
     }
 
-    return new ResponseAuthDto({ ...register, id: Number(register.id) });
+    return new ResponseRegisterDto({ ...register, id: Number(register.id) });
   }
 
-  async login({ username, password }: LoginRequestInterface) {
+  async login({
+    username,
+    password,
+  }: LoginRequestInterface): Promise<ResponseLoginDto> {
     const user = await this.mainService.user.findFirst({
       where: {
         username,
+      },
+      include: {
+        userRole: true,
       },
     });
 
@@ -83,12 +90,16 @@ export class AuthService {
       id: Number(user.id),
       username: user.username,
       email: user.email,
+      roles: user.userRole,
     };
     const accessToken = this.jwtService.sign(payload);
 
-    return new ResponseAuthDto({
+    return new ResponseLoginDto({
       ...user,
       id: Number(user.id),
+      roles: user.userRole.map(
+        (item) => new ResponseRoleDto({ ...item, id: Number(item.id) }),
+      ),
       auth: { type: 'Bearer', token: accessToken, expiredAt: '360' },
     });
   }

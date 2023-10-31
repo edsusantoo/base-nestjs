@@ -14,32 +14,40 @@ import { UserService } from '../service/user.service';
 import {
   RequestCreateUserMainDto,
   RequestCreateUserMongoDto,
+  RequestAddRolesToUserDto,
   RequestUpdateUserMainDto,
   RequestUpdateUserMongoDto,
 } from '../dto/user.dto';
 import { ResponseMessage } from 'src/common/decorator/response.decorator';
 import { JwtAuthGuard } from 'src/auth/guard/jwt.guard';
+import { ResponseMessageType } from 'src/common/dto/response.dto';
+import { RoleGuard } from 'src/role/guard/role.guard';
+import { Roles } from 'src/common/decorator/role.decorator';
+import { Role } from 'src/common/enum/role.enum';
 
 @Controller('user')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RoleGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
   @ResponseMessage('Created Succesfully')
+  @Roles(Role.Admin)
   createUserMain(@Body() body: RequestCreateUserMainDto) {
     return this.userService.createUserMain(body);
   }
 
   @Patch()
   @ResponseMessage('Updated Successfully')
+  @Roles(Role.Admin)
   udpateUserMain(@Body() body: RequestUpdateUserMainDto) {
     return this.userService.updateUserMain(body);
   }
 
   @Delete(':id')
   @ResponseMessage('Deleted Successfully')
-  deleteUserMain(@Param('id', ParseIntPipe) id: number) {
+  @Roles(Role.Admin)
+  deleteUserMain(@Param('id') id: string) {
     return this.userService.deleteUserMain(id);
   }
 
@@ -58,11 +66,17 @@ export class UserController {
     @Query('telp') telp: string,
   ) {
     return this.userService.findUserMain({
-      id: Number(id),
+      id,
       username,
       email,
       telp,
     });
+  }
+
+  @Post('roles')
+  @ResponseMessage(ResponseMessageType.SuccessCreated)
+  addRolesToUser(@Body() body: RequestAddRolesToUserDto) {
+    return this.userService.addRolesToUser(body);
   }
 
   @Post('mongo')

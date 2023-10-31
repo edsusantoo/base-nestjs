@@ -1,4 +1,4 @@
-import { Exclude } from 'class-transformer';
+import { Exclude, Transform } from 'class-transformer';
 import { IsNotEmpty, MinLength, IsEmail } from 'class-validator';
 import { ResponseRoleDto } from 'src/role/dto/role.dto';
 
@@ -26,7 +26,7 @@ export class RequestLoginDto {
 }
 
 export class ResponseLoginDto {
-  id: number;
+  id: string;
   username: string;
   email: string;
 
@@ -38,7 +38,7 @@ export class ResponseLoginDto {
   @Exclude()
   userRole: any[];
 
-  roles: ResponseRoleDto[];
+  roles: string[];
 
   @Exclude()
   password: string;
@@ -54,7 +54,7 @@ export class ResponseLoginDto {
 }
 
 export class ResponseRegisterDto {
-  id: number;
+  id: string;
   username: string;
   email: string;
   createdAt: Date;

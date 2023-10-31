@@ -11,6 +11,7 @@ import * as bcrypt from 'bcrypt';
 import { ResponseLoginDto, ResponseRegisterDto } from '../dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ResponseRoleDto } from 'src/role/dto/role.dto';
+import { ResponseUserRolesMainDto } from 'src/user/dto/user.dto';
 
 interface RegisterRequestInterface {
   username: string;
@@ -60,19 +61,20 @@ export class AuthService {
       throw new NotAcceptableException();
     }
 
-    return new ResponseRegisterDto({ ...register, id: Number(register.id) });
+    return new ResponseRegisterDto(register);
   }
 
-  async login({
-    username,
-    password,
-  }: LoginRequestInterface): Promise<ResponseLoginDto> {
+  async login({ username, password }: LoginRequestInterface) {
     const user = await this.mainService.user.findFirst({
       where: {
         username,
       },
       include: {
-        userRole: true,
+        userRole: {
+          include: {
+            role: true,
+          },
+        },
       },
     });
 
@@ -86,20 +88,21 @@ export class AuthService {
       throw new BadRequestException('Password not match');
     }
 
+    //show role
+    const roles: string[] = user.userRole.map((item) => item.role.name);
+
     const payload = {
-      id: Number(user.id),
+      id: user.id,
       username: user.username,
       email: user.email,
-      roles: user.userRole,
+      roles: roles,
     };
     const accessToken = this.jwtService.sign(payload);
 
     return new ResponseLoginDto({
       ...user,
-      id: Number(user.id),
-      roles: user.userRole.map(
-        (item) => new ResponseRoleDto({ ...item, id: Number(item.id) }),
-      ),
+      id: user.id,
+      roles: roles,
       auth: { type: 'Bearer', token: accessToken, expiredAt: '360' },
     });
   }

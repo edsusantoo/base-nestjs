@@ -3,18 +3,28 @@ import {
   NotAcceptableException,
   NotFoundException,
   ConflictException,
+  BadRequestException,
 } from '@nestjs/common';
 
 import { MainPrismaService } from 'src/database/main-prisma/main-prisma.service';
 import { MongoPrismaService } from 'src/database/mongo-prisma/mongo-prisma.service';
-import { ResponseUserMainDto, ResponseUserMongoDto } from '../dto/user.dto';
+import {
+  ResponseUserMainDto,
+  ResponseUserMongoDto,
+  ResponseUserRolesMainDto,
+} from '../dto/user.dto';
 
 interface UserRequestInterface {
-  id?: number;
+  id?: string;
   name?: string;
   username?: string;
   email?: string;
   telp?: string;
+}
+
+interface UserToRolesInterface {
+  userId: string;
+  roleIds: string[];
 }
 
 interface UserMongoRequestInterface {
@@ -57,7 +67,7 @@ export class UserService {
       throw new NotAcceptableException();
     }
 
-    return new ResponseUserMainDto({ ...insert, id: insert.id.toString() });
+    return new ResponseUserMainDto(insert);
   }
 
   async updateUserMain({
@@ -87,10 +97,10 @@ export class UserService {
       },
     });
 
-    return new ResponseUserMainDto({ ...update, id: update.id.toString() });
+    return new ResponseUserMainDto(update);
   }
 
-  async deleteUserMain(id: number) {
+  async deleteUserMain(id: string) {
     const user = await this.mainService.user.findUnique({
       where: {
         id,
@@ -111,10 +121,29 @@ export class UserService {
   }
 
   async getUsersMain(): Promise<ResponseUserMainDto[]> {
-    const users = await this.mainService.user.findMany();
+    const users = await this.mainService.user.findMany({
+      include: {
+        userRole: {
+          include: {
+            role: true,
+          },
+        },
+      },
+    });
 
     return users.map((user) => {
-      return new ResponseUserMainDto({ ...user, id: user.id.toString() });
+      return new ResponseUserMainDto({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        telp: user.telp,
+        createdAt: user.createdAt,
+        updatedAt: user.createdAt,
+        roles: user.userRole.map((item) => ({
+          id: item.roleId,
+          name: item.role.name,
+        })),
+      });
     });
   }
 
@@ -129,7 +158,7 @@ export class UserService {
         OR: [
           {
             id: {
-              equals: id ? id : 0,
+              equals: id ? id : '',
             },
           },
           {
@@ -152,7 +181,53 @@ export class UserService {
     });
 
     return users.map((user) => {
-      return new ResponseUserMainDto({ ...user, id: user.id.toString() });
+      return new ResponseUserMainDto(user);
+    });
+  }
+
+  async addRolesToUser({ userId, roleIds }: UserToRolesInterface) {
+    const user = await this.mainService.user.findFirst({
+      where: {
+        id: userId,
+      },
+      include: {
+        userRole: true,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const data = roleIds.map((item) => ({
+      userId: userId,
+      roleId: item,
+    }));
+
+    const roles = await this.mainService.role.findMany({
+      where: {
+        id: {
+          in: roleIds,
+        },
+      },
+    });
+
+    if (!roles) {
+      throw new NotFoundException('Role not found');
+    }
+
+    const userRoles = await this.mainService.userRole.createMany({
+      data: data,
+    });
+
+    if (!userRoles) {
+      throw new BadRequestException();
+    }
+
+    return new ResponseUserRolesMainDto({
+      userId: user.id,
+      username: user.username,
+      roles: roles,
     });
   }
 

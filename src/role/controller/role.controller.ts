@@ -6,7 +6,6 @@ import {
   Patch,
   Delete,
   Param,
-  ParseIntPipe,
   Get,
   Query,
 } from '@nestjs/common';
@@ -35,7 +34,7 @@ export class RoleController {
 
   @Delete(':id')
   @ResponseMessage(ResponseMessageType.SuccessDelete)
-  deleteRole(@Param('id', ParseIntPipe) id: number) {
+  deleteRole(@Param('id') id: string) {
     return this.roleService.deleteRole(id);
   }
 
@@ -49,7 +48,7 @@ export class RoleController {
   @ResponseMessage(ResponseMessageType.SuccessFindData)
   findRole(@Query('id') id: string, @Query('name') name: string) {
     return this.roleService.findRole({
-      id: Number(id),
+      id,
       name,
     });
   }

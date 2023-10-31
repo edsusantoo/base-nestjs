@@ -12,7 +12,7 @@ datasource db {
 }
 
 model User {
-  id        BigInt     @id @default(autoincrement())
+  id        String        @id @default(uuid())
   username  String     @unique @db.VarChar(100)
   email     String     @unique @db.VarChar(200)
   telp      String?    @db.VarChar(16)
@@ -25,7 +25,7 @@ model User {
 }
 
 model Role {
-  id        BigInt     @id @default(autoincrement())
+  id        String     @id @default(uuid())
   name      String     @unique @db.VarChar(100)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
@@ -35,11 +35,11 @@ model Role {
 }
 
 model UserRole {
-  id        BigInt   @default(autoincrement())
+  id        String   @default(uuid())
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    BigInt
+  userId    String
   role      Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
-  roleId    BigInt
+  roleId    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

@@ -2,11 +2,12 @@ import { Module, ClassSerializerInterceptor } from '@nestjs/common';
 import { AuthService } from './service/auth.service';
 import { AuthController } from './controller/auth.controller';
 import { DatabaseModule } from 'src/database/database.module';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ResponseInterceptor } from 'src/common/interceptor/response.interceptor';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategy/jwt.strategy';
+import { RoleGuard } from 'src/role/guard/role.guard';
 
 @Module({
   imports: [

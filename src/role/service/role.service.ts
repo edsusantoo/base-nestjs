@@ -8,7 +8,7 @@ import { MainPrismaService } from 'src/database/main-prisma/main-prisma.service'
 import { ResponseRoleDto } from '../dto/role.dto';
 
 interface RoleInterface {
-  id?: number;
+  id?: string;
   name: string;
 }
 
@@ -37,7 +37,7 @@ export class RoleService {
       throw new BadRequestException();
     }
 
-    return new ResponseRoleDto({ ...insert, id: Number(insert.id) });
+    return new ResponseRoleDto(insert);
   }
 
   async updateRole({ id, name }: RoleInterface): Promise<ResponseRoleDto> {
@@ -64,10 +64,10 @@ export class RoleService {
       throw new BadRequestException();
     }
 
-    return new ResponseRoleDto({ ...update, id: Number(update.id) });
+    return new ResponseRoleDto(update);
   }
 
-  async deleteRole(id: number) {
+  async deleteRole(id: string) {
     const role = await this.mainService.role.findFirst({
       where: {
         id,
@@ -91,7 +91,7 @@ export class RoleService {
     const roles = await this.mainService.role.findMany();
 
     return roles.map((role) => {
-      return new ResponseRoleDto({ ...role, id: Number(role.id) });
+      return new ResponseRoleDto(role);
     });
   }
 
@@ -101,7 +101,7 @@ export class RoleService {
         OR: [
           {
             id: {
-              equals: id ? id : 0,
+              equals: id ? id : '',
             },
           },
           {
@@ -114,7 +114,7 @@ export class RoleService {
     });
 
     return roles.map((role) => {
-      return new ResponseRoleDto({ ...role, id: Number(role.id) });
+      return new ResponseRoleDto(role);
     });
   }
 }

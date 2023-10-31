@@ -1,5 +1,5 @@
 import { Exclude } from 'class-transformer';
-import { IsNotEmpty, MinLength, IsEmail } from 'class-validator';
+import { IsNotEmpty, MinLength, IsEmail, IsString } from 'class-validator';
 
 export class RequestCreateUserMainDto {
   @IsNotEmpty()
@@ -17,7 +17,7 @@ export class RequestCreateUserMainDto {
 
 export class RequestUpdateUserMainDto {
   @IsNotEmpty()
-  id: number;
+  id: string;
 
   @IsNotEmpty()
   @MinLength(3, {
@@ -32,6 +32,15 @@ export class RequestUpdateUserMainDto {
   telp: string;
 }
 
+export class RequestAddRolesToUserDto {
+  @IsNotEmpty()
+  @IsString()
+  userId: string;
+
+  @IsNotEmpty()
+  roleIds: string[];
+}
+
 export class ResponseUserMainDto {
   id: string;
   username: string;
@@ -43,7 +52,25 @@ export class ResponseUserMainDto {
   @Exclude()
   password: string;
 
+  roles: {
+    id: string;
+    name: string;
+  }[];
+
   constructor(partial: Partial<ResponseUserMainDto>) {
+    Object.assign(this, partial);
+  }
+}
+
+export class ResponseUserRolesMainDto {
+  userId: string;
+  username: string;
+  roles: {
+    id: string;
+    name: string;
+  }[];
+
+  constructor(partial: Partial<ResponseUserRolesMainDto>) {
     Object.assign(this, partial);
   }
 }

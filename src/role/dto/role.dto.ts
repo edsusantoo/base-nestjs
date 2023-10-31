@@ -1,10 +1,5 @@
 import { IsNotEmpty, MinLength } from 'class-validator';
 
-export enum Role {
-  User = 'user',
-  Admin = 'admin',
-}
-
 export class RequestCreateRoleDto {
   @IsNotEmpty()
   @MinLength(3, {
@@ -15,14 +10,14 @@ export class RequestCreateRoleDto {
 
 export class RequestUpdateRoleDto {
   @IsNotEmpty()
-  id: number;
+  id: string;
 
   @IsNotEmpty()
   name: string;
 }
 
 export class ResponseRoleDto {
-  id: number;
+  id: string;
   name: string;
   createdAt: Date;
   updatedAt: Date;

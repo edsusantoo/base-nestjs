@@ -11,7 +11,7 @@
 - [x] Create Auth Service
 - [x] Implentation Passport JWT
 - [x] Create Swagger
-- [ ] Role Base Access Control
+- [x] Role Base Access Control
 - [ ] Permission Control
 
 ## Tech Stack

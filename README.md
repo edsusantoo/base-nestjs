@@ -48,3 +48,4 @@ $ npm run generate:db_clients
 
 ## Source Learn
 - [How to connect Multiple Database using Prisma](https://dulanwirajith.medium.com/how-to-connect-multiple-databases-using-prisma-in-nest-js-e8908529ba38)
+- [Config Swagger with swagger-ui-express](https://medium.com/@shyamal.jadav/add-swagger-ui-to-node-js-application-807960509ce6)

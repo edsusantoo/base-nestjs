@@ -10,8 +10,6 @@ import { MainPrismaService } from 'src/database/main-prisma/main-prisma.service'
 import * as bcrypt from 'bcrypt';
 import { ResponseLoginDto, ResponseRegisterDto } from '../dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
-import { ResponseRoleDto } from 'src/role/dto/role.dto';
-import { ResponseUserRolesMainDto } from 'src/user/dto/user.dto';
 
 interface RegisterRequestInterface {
   username: string;

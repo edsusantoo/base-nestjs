@@ -178,10 +178,28 @@ export class UserService {
           },
         ],
       },
+      include: {
+        userRole: {
+          include: {
+            role: true,
+          },
+        },
+      },
     });
 
     return users.map((user) => {
-      return new ResponseUserMainDto(user);
+      return new ResponseUserMainDto({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        telp: user.telp,
+        createdAt: user.createdAt,
+        updatedAt: user.createdAt,
+        roles: user.userRole.map((item) => ({
+          id: item.roleId,
+          name: item.role.name,
+        })),
+      });
     });
   }
 

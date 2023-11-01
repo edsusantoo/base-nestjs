@@ -452,7 +452,7 @@
                       "example": "Show datas"
                     },
                     "result": {
-                      "type": "object",
+                      "type": "array",
                       "example": [
                         {
                           "id": "ba124eb2-62cc-4f38-855c-13ae1757cd2e",
@@ -523,6 +523,91 @@
                     "result": {
                       "type": "object",
                       "example": {}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/find": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "description": "Find User",
+        "tags": ["User"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "email",
+            "style": "deepObject",
+            "allowReserved": true,
+            "schema":{
+              "type": "string",
+              "properties": {
+                "id":{
+                  "type": "string",
+                  "example":"64fe4bbd-3597-4c64-aac7-18f535e89a92"
+                },
+                "email":{
+                  "type": "string",
+                  "example": "edi.susanto@gmail.com"
+                },
+                "username":{
+                  "type": "string",
+                  "example": "edi.susanto"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Show Data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "statusCode": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Show datas"
+                    },
+                    "result": {
+                      "type": "array",
+                      "example": [
+                        {
+                          "id": "ba124eb2-62cc-4f38-855c-13ae1757cd2e",
+                          "username": "edi.susanto",
+                          "email": "edi.susanto@gmail.com",
+                          "telp": null,
+                          "createdAt": "2023-10-31T02:12:06.070Z",
+                          "updatedAt": "2023-10-31T02:12:06.070Z",
+                          "roles": [
+                            {
+                              "id": "64fe4bbd-3597-4c64-aac7-18f535e89a92",
+                              "name": "admin"
+                            },
+                            {
+                              "id": "e72745f3-8492-4a25-8899-8c5937b424f7",
+                              "name": "user"
+                            },
+                            {
+                              "id": "5d24df5b-ff00-4857-aac7-d06c7971d43c",
+                              "name": "testing"
+                            }
+                          ]
+                        }
+                      ]
                     }
                   }
                 }

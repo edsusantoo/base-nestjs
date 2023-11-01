@@ -10,9 +10,11 @@
 - [x] Create Base Response
 - [x] Create Auth Service
 - [x] Implentation Passport JWT
-- [x] Create Swagger
 - [x] Role Base Access Control
-- [ ] Permission Control
+- [x] Create Swagger and Config Swagger
+
+## Discontinue
+- [ ] Permission Control 
 
 ## Tech Stack
 - NestJS 10

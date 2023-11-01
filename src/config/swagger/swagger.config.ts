@@ -4,7 +4,7 @@ import { INestApplication } from '@nestjs/common';
 
 export const configSwagger = (app: INestApplication<any>) => {
   app.use(
-    '/swagger',
+    '/doc/api',
     swaggerUiExpress.serve,
     swaggerUiExpress.setup(JSON.parse(readFileSync('./openapi.json', 'utf-8'))),
   );

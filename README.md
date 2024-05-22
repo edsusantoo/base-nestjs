@@ -1,6 +1,6 @@
 ## Description
 
-[Nest](https://github.com/nestjs/nest) baseframework TypeScript starter repository and base project.
+[Nest](https://github.com/nestjs/nest) base framework TypeScript starter repository and base project.
 
 ## Task List
 
